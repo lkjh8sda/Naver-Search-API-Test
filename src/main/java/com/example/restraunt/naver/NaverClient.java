@@ -1,5 +1,7 @@
 package com.example.restraunt.naver;
 
+import com.example.restraunt.naver.dto.SearchImageReq;
+import com.example.restraunt.naver.dto.SearchImageRes;
 import com.example.restraunt.naver.dto.SearchLocalReq;
 import com.example.restraunt.naver.dto.SearchLocalRes;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +54,28 @@ public class NaverClient {
         return responseEntity.getBody();
     }
 
-    public void imageSearch(){
+    public SearchImageRes imageSearch(SearchImageReq searchImageReq){
+        var uri = UriComponentsBuilder.fromUriString(naverImageSearchUrl)
+                //그냥 HashMap이 아닌 MultivalueMap쓰는이유 => 같은 Key를 가진 파라미터 값이 여러개일 경우
+                .queryParams(searchImageReq.toMultivalueMap())
+                .build()
+                .encode()
+                .toUri();
 
+        var headers = new HttpHeaders();
+        headers.set("X-Naver-Client-Id",naverClientId);
+        headers.set("X-Naver-Client-Secret",naverClientSecret);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        var httpEntity = new HttpEntity<>(headers);
+        var responseType = new ParameterizedTypeReference<SearchImageRes>(){};
+
+        var responseEntity = new RestTemplate().exchange(
+                uri,
+                HttpMethod.GET,
+                httpEntity,
+                responseType
+        );
+        return responseEntity.getBody();
     }
 }
