@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class WishListService {
     private final NaverClient naverClient;
 
-    public void search(String query){
+    public WishListDto search(String query){
 
         //지역검색
         var searchLocalReq = new SearchLocalReq();
@@ -20,20 +20,31 @@ public class WishListService {
         var searchLocalRes = naverClient.localSearch(searchLocalReq);
 
         if(searchLocalRes.getTotal() > 0){
-            var item = searchLocalRes.getItems().stream().findFirst().get();
+            var localItem = searchLocalRes.getItems().stream().findFirst().get();
 
-            var imageQuery = item.getTitle().replaceAll("<[^>]*>","");
+            var imageQuery = localItem.getTitle().replaceAll("<[^>]*>","");
             var searchImageReq = new SearchImageReq();
             searchImageReq.setQuery(imageQuery);
             //이미지 검색
             var searchImageRes = naverClient.imageSearch(searchImageReq);
 
             if(searchImageRes.getTotal() > 0){
-                //결과 리턴
-                searchImageRes.getItems().stream().findFirst().get();
-            }
-        }
 
+                var imageItem = searchImageRes.getItems().stream().findFirst().get();
+                //결과 리턴
+                var result = new WishListDto();
+                result.setTitle(localItem.getTitle());
+                result.setCategory(searchLocalRes.getCategory());
+                result.setReadAddress(localItem.getRoadAddress());
+                result.setAddress(localItem.getAddress());
+                result.setImageLink(imageItem.getLink());
+                result.setHomePageLink(localItem.getLink());
+
+                return result;
+            }
+
+        }
+        return new WishListDto();
     }
 
 }
