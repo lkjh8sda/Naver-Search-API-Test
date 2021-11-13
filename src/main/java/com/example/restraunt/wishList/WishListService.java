@@ -34,7 +34,7 @@ public class WishListService {
                 //결과 리턴
                 var result = new WishListDto();
                 result.setTitle(localItem.getTitle());
-                result.setCategory(searchLocalRes.getCategory());
+                result.setCategory(localItem.getCategory());
                 result.setReadAddress(localItem.getRoadAddress());
                 result.setAddress(localItem.getAddress());
                 result.setImageLink(imageItem.getLink());
