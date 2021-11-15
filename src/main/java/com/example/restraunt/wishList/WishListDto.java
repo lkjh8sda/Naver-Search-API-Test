@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class WishListDto extends MemoryDbEntity {
-    private int index;
+    private Integer index;
     private String title;
     private String category;
-    private String readAddress;
+    private String roadAddress;
     private String address;
     private String homePageLink;
     private boolean isVisit;

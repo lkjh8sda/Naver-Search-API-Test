@@ -13,10 +13,13 @@ import java.time.LocalDateTime;
 public class WishListEntity extends MemoryDbEntity {
     private String title;
     private String category;
-    private String readAddress;
+    private String roadAddress;
     private String homePageLink;
+    private String address;
     private boolean isVisit;
     private String imageLink;
     private int visitCount;
     private LocalDateTime lastVisitDate;
+
+
 }
